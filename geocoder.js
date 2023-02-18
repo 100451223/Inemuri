@@ -7,7 +7,7 @@ function Location(add, lat, lng, mrk = null) {
   this.marker = mrk;
 }
 
-function getDestCoord(destAddress) {
+function addToLatlng(destAddress) {
   /* Get latitud and longitude from un-formatted address */
 
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${apiKey}`;
@@ -43,7 +43,7 @@ function getDestCoord(destAddress) {
 
 }
 
-function getDestAddr(lat, lng) {
+function latlngToAddr(lat, lng) {
   /* Get formatted address from latitude and longitude */
 
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`

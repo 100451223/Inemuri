@@ -19,7 +19,7 @@ document.getElementById("searchButton").addEventListener("click", () => {
 function setCourse() {
   // Add a marker to the location that the user inputted
 
-  getDestCoord(destUserInput).then(resp => {
+  addToLatlng(destUserInput).then(resp => {
     if (resp != undefined) {
 
       if (mymap != undefined) {
@@ -34,7 +34,7 @@ function setCourse() {
         }
       }
     } else {
-      alert("¡Lo siento! No se ha encontrado la dirección que has introducido...");
+      showNotif("¡Lo sentimos! \nNo se ha encontrado la dirección que has introducido", "red")
       return;
     }
   })

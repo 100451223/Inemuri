@@ -47,13 +47,16 @@
       llegar al destino, solo tienes que pulsar "RESET". Además cuidado, si tienes activado el modo "No Molestar" o
       "Silencio" del móvil, la aplicación no podrá avsarte!<br><br>¡Buen Viaje!</p>
   </div>
-  <div id="map"></div>
+  <div id="map">
+    <p id="distance"></p>
+  </div>
   <div class="lowerDrawer">
     <img id="car" src="img/laytonmobile.png" />
+    <span id="centerButton" class="material-symbols-outlined iconButton">my_location</span>
     <div class="mainMenu">
       <div class="inputDrawer">
         <input id="destInput" type="text" placeholder="Escribe tu destino..."></input>
-        <span id="searchButton" class="material-symbols-outlined">search</span>
+        <span id="searchButton" class="material-symbols-outlined iconButton">search</span>
       </div>
       <p id="destination" class="subtitle">Destino:</p>
       <p id="currentLocation" class="subtitle">Estás aquí: </p>
@@ -65,7 +68,7 @@
   </div>
   <audio id="audio-player" src="sounds/start.mp3" type="audio/ogg"><audio />
 
-
+    <script src="notifications.js"></script>
     <script src="instructions.js"></script>
     <script src="geocoder.js"></script>
     <script src="mapFunctions.js"></script>

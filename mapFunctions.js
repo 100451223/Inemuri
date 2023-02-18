@@ -1,22 +1,19 @@
-const destinationIcon = L.icon({
-  iconUrl: 'my-icon.png',
-  iconSize: [38, 95],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
-  shadowUrl: 'my-icon-shadow.png',
-  shadowSize: [68, 95],
-  shadowAnchor: [22, 94]
-});
+function centerMap(currentPos, map) {
+  map.setView([currentPos.lat, currentPos.lng], 20);
+}
 
-const userIcon = L.icon({
-  iconUrl: 'img/users_marker.png',
-  iconSize: [38, 95],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
-  shadowUrl: 'my-icon-shadow.png',
-  shadowSize: [68, 95],
-  shadowAnchor: [22, 94]
-});
+function getCoordDistance(posA, posB, map) {
+  let posALatlng = L.latLng(posA.lat, posA.lng);
+  let posBLatlng = L.latLng(posB.lat, posB.lng);
+  return map.distance(posALatlng, posBLatlng)
+}
+
+function drawCurrentToDestPolyline(posA, posB, map) {
+  let posALatlng = L.latLng(posA.lat, posA.lng);
+  let posBLatlng = L.latLng(posB.lat, posB.lng);
+  polyline = L.polyline([posALatlng, posBLatlng], { color: 'red' });
+  map.addLayer(polyline);
+}
 
 function addMarker(started, map, loc) {
   if (!started) {
@@ -30,7 +27,7 @@ function addMarker(started, map, loc) {
   return null;
 }
 
-function updateMap(pos) {
+function setUpMap(pos) {
 
   mymap = L.map('map').setView([pos.coords.latitude, pos.coords.longitude], 20);
 
@@ -40,7 +37,7 @@ function updateMap(pos) {
   }).addTo(mymap);
 
   // Change the users current location (*formatted*) that is being dispayed
-  getDestAddr(pos.coords.latitude, pos.coords.longitude).then(resp => {
+  latlngToAddr(pos.coords.latitude, pos.coords.longitude).then(resp => {
     currentPosition = resp;
     currentPosition.mrk = addMarker(started, mymap, resp);
     document.getElementById("currentLocation").innerText = "Estas aquí:   " + resp.add;
@@ -50,7 +47,7 @@ function updateMap(pos) {
   // the 'destination' only changes if there are no active markers!
 
   mymap.on('click', function(clickLocation) {
-    getDestAddr(clickLocation.latlng.lat, clickLocation.latlng.lng).then(resp => {
+    latlngToAddr(clickLocation.latlng.lat, clickLocation.latlng.lng).then(resp => {
 
       if (!started && currentDestination == null) {
         currentDestination = resp;

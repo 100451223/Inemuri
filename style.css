@@ -8,7 +8,7 @@ html, body {
   height: 100%;
 }
 
-p {
+p, h3 {
   font-family: 'Poppins', sans-serif;
 }
 
@@ -142,7 +142,7 @@ body {
   background-color: #e3e3e3;
 }
 
-#searchButton {
+.iconButton {
   position: absolute;
   right: 20px;
   color: white;
@@ -151,7 +151,11 @@ body {
   border-radius: 12px;
 }
 
-#searchButton:hover{
+#centerButton {
+  margin-top: 15px;
+}
+
+.iconButton:hover{
   cursor: pointer;
   background-color: #9c4f2d;
 }
@@ -189,8 +193,43 @@ button:hover{
 }
 
 #map {
-  height: 100%;
+  position: absolute;
+  bottom: 0px;
+  height: calc(100% - 10vh);
   width: 100%;
+}
+
+#distance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  
+  position: absolute;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  width: 150px;
+  height: 30px;
+  margin-top: 10px;
+  
+  background-color: white;
+  border-radius: 15px;
+  z-index: 9999;
+}
+
+.notification {
+  position: absolute;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
+  width: 300px;
+  padding: 10px;
+  color: white;
+  border-radius: 15px;
+  z-index: 99999;
 }
 
 @media only screen and (max-width: 700px) {
@@ -213,6 +252,9 @@ button:hover{
 
   .subtitle{
     font-size: 0.75em;
+  }
+  #centerButton {
+    margin-top: 8px;
   }
   
 }

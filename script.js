@@ -25,23 +25,36 @@ const destReachedThreshold = 30;
 const destReachedVibDur = 5000;
 const destReachedInt = destReachedVibDur + 1000;
 
-let intervalId;
+let intervalId = null;
 
-function getCoordDistance(posA, posB, map) {
-  let posALatlng = L.latLng(posA.lat, posA.lng);
-  let posBLatlng = L.latLng(posB.lat, posB.lng);
-  return map.distance(posALatlng, posBLatlng)
+function setDistance(distance) {
+  let dist = document.getElementById("distance");
+  dist.style.visibility = "visible"
+  dist.innerText = "Distancia: " + Math.floor(distance) + " m";
 }
 
-function drawCurrentToDestPolyline(posA, posB, map) {
-  let posALatlng = L.latLng(posA.lat, posA.lng);
-  let posBLatlng = L.latLng(posB.lat, posB.lng);
-  polyline = L.polyline([posALatlng, posBLatlng], { color: 'red' });
-  map.addLayer(polyline);
+function resetEverything() {
+  mymap.removeLayer(currentDestination.mrk);
+  mymap.removeLayer(polyline);
+  currentDestination = null;
+  started = false;
+  phase1 = false;
+  phase2 = false;
+  enterNextPhase = true;
+  if (intervalId != null)
+    clearInterval(intervalId);
+  intervalId = null;
+
+  const subtitle = document.getElementById("destination");
+  subtitle.innerText = "Destino: ";
+
+  document.getElementById("distance").style.visibility = "hidden";
+
+  centerMap(currentPosition, mymap);
+  document.getElementById("car").src = "img/laytonmobile.png";
 }
 
-
-nav.getCurrentPosition(updateMap);
+nav.getCurrentPosition(setUpMap);
 
 function startVibration(distance) {
 
@@ -77,21 +90,20 @@ function startVibration(distance) {
     enterNextPhase = false;
     window.navigator.vibrate(0);
     window.navigator.vibrate(destReachedVibDur);
-    let audio = document.getElementById("audio-player");
-    audio.src = "sounds/finish.mp3";
-    audio.play();
+    playSoundEffect("sounds/finish.mp3")
+    resetEverything();
   }
 }
 
 nav.watchPosition((resp) => {
   /* If it is STARTED, update the map's current view AND the user's marker */
 
-  getDestAddr(resp.coords.latitude, resp.coords.longitude).then(resp => {
+  latlngToAddr(resp.coords.latitude, resp.coords.longitude).then(resp => {
     if (started) {
       mymap.setView([currentPosition.lat, currentPosition.lng], 20);
       mymap.removeLayer(currentPosition.mrk)
       currentPosition = resp;
-      currentPosition.mrk = addMarker(false, mymap, resp, userIcon); // <-- chapuza addMarker(-> false <-, ..., ...)
+      currentPosition.mrk = addMarker(false, mymap, resp); // <-- chapuza addMarker(-> false <-, ..., ...)
 
       mymap.removeLayer(polyline);
       drawCurrentToDestPolyline(currentPosition, currentDestination, mymap);
@@ -101,6 +113,7 @@ nav.watchPosition((resp) => {
 
     if (started) {
       let distanceToDest = getCoordDistance(currentPosition, currentDestination, mymap);
+      setDistance(distanceToDest);
       startVibration(distanceToDest);
     }
   }
@@ -109,27 +122,13 @@ nav.watchPosition((resp) => {
 
 document.getElementById("reset").addEventListener("click", () => {
   if (mymap != undefined && currentDestination != null) {
-    mymap.removeLayer(currentDestination.mrk);
-    mymap.removeLayer(polyline);
-    currentDestination = null;
-    started = false;
-    phase1 = false;
-    phase2 = false;
-    enterNextPhase = true;
-    window.navigator.vibrate(0);
+    resetEverything()
+    window.navigator.vibrate([0]);
 
-    let audio = document.getElementById("audio-player");
-    audio.src = "sounds/reset.mp3";
-    audio.play();
+    playSoundEffect("sounds/reset.mp3");
 
-    const subtitle = document.getElementById("destination");
-    subtitle.innerText = "Destino: ";
-
-    mymap.setView([currentPosition.lat, currentPosition.lng], 20);
-
-    document.getElementById("car").src = "img/laytonmobile.png";
   } else {
-    alert("No destination is set");
+    showNotif("No destination is set!", "red");
   }
 })
 
@@ -138,14 +137,20 @@ document.getElementById("start").addEventListener("click", () => {
 
     started = true;
     drawCurrentToDestPolyline(currentPosition, currentDestination, mymap);
+    centerMap(currentPosition, mymap);
 
-    let audio = document.getElementById("audio-player");
-    audio.src = "sounds/start.mp3";
-    audio.play();
+    playSoundEffect("sounds/start.mp3");
+
+    let distance = getCoordDistance(currentPosition, currentDestination, mymap)
+    setDistance(distance)
 
 
     document.getElementById("car").src = "img/laytonmobile.gif"
   } else {
-    alert("Please, choose a location")
+    showNotif("Please, choose a location", "red")
   }
+})
+
+document.getElementById("centerButton").addEventListener("click", () => {
+  centerMap(currentPosition, mymap);
 })
