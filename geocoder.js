@@ -7,7 +7,7 @@ function Location(add, lat, lng, mrk = null) {
   this.marker = mrk;
 }
 
-function addToLatlng(destAddress) {
+function addToLatlng(address) {
   /* Get latitud and longitude from un-formatted address */
 
   let formatedAddress;
@@ -15,7 +15,7 @@ function addToLatlng(destAddress) {
   let longitude;
   let result;
 
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${apiKey}`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
   return fetch(url)
     .then(response => {
       if (response.ok) {

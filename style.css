@@ -232,6 +232,11 @@ button:hover{
   z-index: 99999;
 }
 
+.pac-container {
+  border-radius: 10px;
+  max-height: 100px;
+}
+
 @media only screen and (max-width: 700px) {
 
   .notifications {

@@ -47,3 +47,12 @@ document.getElementById("destInput").addEventListener("keyup", (event) => {
     setCourse(destUserInput, mymap, started).then(resp => currentDestination = resp);
   }
 })
+
+window.initMap = function() {
+    // JS API is loaded and available
+    let autocomplete = new google.maps.places.Autocomplete(document.getElementById("destInput"));
+    autocomplete.addListener("place_changed", function() {
+        let place = autocomplete.getPlace();
+        let latlng = [place.geometry.location.lat(), place.geometry.location.lng()]
+    })
+};
