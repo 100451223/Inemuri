@@ -1,14 +1,20 @@
 function centerMap(currentPos, map) {
+  /* Center the map on the current position */
+
   map.setView([currentPos.lat, currentPos.lng], 20);
 }
 
 function getCoordDistance(posA, posB, map) {
+  /* Get the distance between two coordinates */
+
   let posALatlng = L.latLng(posA.lat, posA.lng);
   let posBLatlng = L.latLng(posB.lat, posB.lng);
   return map.distance(posALatlng, posBLatlng)
 }
 
 function drawCurrentToDestPolyline(posA, posB, map) {
+  /* Draw a polyline between two coordinates */
+
   let posALatlng = L.latLng(posA.lat, posA.lng);
   let posBLatlng = L.latLng(posB.lat, posB.lng);
   polyline = L.polyline([posALatlng, posBLatlng], { color: 'red' });
@@ -16,9 +22,11 @@ function drawCurrentToDestPolyline(posA, posB, map) {
 }
 
 function addMarker(started, map, loc) {
+  /* Add a marker to the map */
+
   if (!started) {
     let mrk = L.marker([loc.lat, loc.lng]);
-    mymap.addLayer(mrk);
+    map.addLayer(mrk);
     mrk.bindPopup(loc.add);
 
     started = !started;
@@ -28,6 +36,7 @@ function addMarker(started, map, loc) {
 }
 
 function setUpMap(pos) {
+  /* Set up the map, centering it on the user's current location */
 
   mymap = L.map('map').setView([pos.coords.latitude, pos.coords.longitude], 20);
 
@@ -49,16 +58,17 @@ function setUpMap(pos) {
   mymap.on('click', function(clickLocation) {
     latlngToAddr(clickLocation.latlng.lat, clickLocation.latlng.lng).then(resp => {
 
-      if (!started && currentDestination == null) {
+      if (!started) {
+        if (currentDestination != null) {
+          mymap.removeLayer(currentDestination.mrk);
+        }
         currentDestination = resp;
         currentDestination.mrk = addMarker(started, mymap, resp);
 
         const subtitle = document.getElementById("destination");
         subtitle.innerText = "Destino: " + resp.add;
-        //started = true;
       }
 
     });
   })
 }
-

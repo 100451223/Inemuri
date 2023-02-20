@@ -128,7 +128,7 @@ document.getElementById("reset").addEventListener("click", () => {
     playSoundEffect("sounds/reset.mp3");
 
   } else {
-    showNotif("No destination is set!", "red");
+    showNotif("Error", "No destination is set!", "red");
   }
 })
 
@@ -147,7 +147,7 @@ document.getElementById("start").addEventListener("click", () => {
 
     document.getElementById("car").src = "img/laytonmobile.gif"
   } else {
-    showNotif("Please, choose a location", "red")
+    showNotif("Error", "Please, choose a location", "red")
   }
 })
 

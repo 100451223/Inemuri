@@ -69,7 +69,7 @@ body {
   justify-content: center;
 }
 
-.instructions{
+.notifications{
   display: flex;
   flex-direction: column; 
   
@@ -89,11 +89,11 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-#closeInst {
+#closeNotif {
   align-self: flex-end;
 }
 
-#closeInst:hover {
+#closeNotif:hover {
   cursor: pointer;
   color: #ff4242;
 }
@@ -234,7 +234,7 @@ button:hover{
 
 @media only screen and (max-width: 700px) {
 
-  .instructions {
+  .notifications {
     width: 75vw;
     font-size: 0.5em;
   }
